@@ -1,0 +1,9 @@
+{
+	"name": "db1231",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "30a81e40-14fb-4e99-a29c-e1e6a9baad5c",
+		"tenantId": "269a767e-f434-403e-a7eb-ea215a232cfb"
+	}
+}
