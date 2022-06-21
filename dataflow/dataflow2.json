@@ -1,0 +1,60 @@
+{
+	"name": "dataflow2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText4",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText5",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Id as string,",
+				"          Correlationid as string,",
+				"          Operationname as string,",
+				"          Status as string,",
+				"          Eventcategory as string,",
+				"          Level as string,",
+				"          Time as string,",
+				"          Subscription as string,",
+				"          Eventinitiatedby as string,",
+				"          Resourcetype as string,",
+				"          Resourcegroup as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(ERROR_FUNCTION('{Resourcegroup}==__SINGLE_QUOTE__new-grp__SINGLE_QUOTE____NEW_LINE_R____NEW_LINE_N____SINGLE_QUOTE__'),",
+				"     ERROR_FUNCTION(''),",
+				"     disjoint: true) ~> split1@(conditional, test)",
+				"split1@conditional sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['logoutput.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
